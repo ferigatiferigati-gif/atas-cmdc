@@ -4,7 +4,7 @@ from google import genai
 
 # =====================================================================
 # CONFIGURAÇÃO DE SEGURANÇA: Coloque sua chave do Gemini aqui dentro.
-CHAVE_API_AUTOMACAO = "AIzaSyCjFZON18OH5dnjcPz6gTuBL9199OJxnGY"
+CHAVE_API_AUTOMACAO = "AIzaSyBXp3B7BrVPufS-D9P76a8Nn5QjEhCb9hQ"
 # =====================================================================
 
 # Configuração visual e título da aba
