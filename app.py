@@ -3,7 +3,7 @@ import os
 from google import genai
 
 # =====================================================================
-# CONFIGURAÇÃO DE SEGURANÇA: Coloque sua chave do Gemini aqui dentro.
+# CONFIGURAÇÃO DE SEGURANÇA FINAL - SUA CHAVE DIRETA AQUI:
 CHAVE_API_AUTOMACAO = "AIzaSyBXp3B7BrVPufS-D9P76a8Nn5QjEhCb9hQ"
 # =====================================================================
 
@@ -14,30 +14,27 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- MENU LATERAL DE SUPORTE E COLARES (Para a Heloísa) ---
+# --- MENU LATERAL DE SUPORTE (Para a Heloísa) ---
 with st.sidebar:
     st.markdown("### 🌟 Central de Ajuda da Heloísa")
     st.write("Olá, Heloísa! Se tiver qualquer dúvida, veja as respostas rápidas abaixo:")
     
     with st.expander("❓ Como o sistema funciona?"):
-        st.write("Você envia o áudio da reunião, a nossa Inteligência Artificial 'escuta' tudo o que foi falado e redige a ata diretamente no modelo oficial de Ouro Preto, convertendo tudo para um arquivo do Word.")
+        st.write("Você envia o áudio da reunião, a nossa Inteligência Artificial 'escuta' tudo o que foi falado e redige a ata diretamente no modelo oficial de Ouro Preto, convertendo tudo para um arquivo de texto pronto para o Word.")
         
     with st.expander("❓ Qual o tamanho máximo do áudio?"):
         st.write("O sistema aguenta áudios bem longos, de até 5 horas de duração de uma só vez.")
         
     with st.expander("❓ O botão de gerar sumiu ou deu erro?"):
         st.write("Isso geralmente acontece se a internet oscilar durante o envio do áudio. Sugerimos recarregar a página (apertando F5) e tentar enviar o áudio novamente.")
-        
-    with st.expander("⚠️ Mensagem de erro vermelha?"):
-        st.write("Se aparecer algum aviso em vermelho na tela, tire um print ou copie o texto e envie para o responsável técnico ajustar a Chave de Acesso.")
 
     st.markdown("---")
-    st.caption("Sistema desenvolvido com carinho para o CMDCA de Ouro Preto/MG.")
+    st.caption("Sistema desenvolvido para o CMDCA de Ouro Preto/MG.")
 
 # --- CORPO PRINCIPAL DO SISTEMA ---
 st.title("🏢 Sistema de Atas - CMDCA Ouro Preto")
 st.subheader("Olá, Heloísa! Seja bem-vinda ao seu assistente digital.")
-st.write("Este espaço foi feito para facilitar o seu trabalho. Aqui você transforma as gravações do Conselho em Atas Oficiais para o Word com apenas alguns cliques.")
+st.write("Este espaço foi feito para facilitar o seu trabalho. Aqui você transforma as gravações do Conselho em Atas Oficiais de forma rápida.")
 st.markdown("---")
 
 # Passo 1: Envio do arquivo
@@ -66,7 +63,7 @@ if arquivo_audio:
                 
                 audio_file = client.files.upload(file=temp_filename)
             
-            with st.spinner("🤖 Estou escutando a reunião e redigindo a ata no padrão de Ouro Preto... Como o áudio é longo, isso pode demorar de 2 a 5 minutos. Pode tomar um café, só não feche esta página! 😉"):
+            with st.spinner("🤖 Estou escutando a reunião e redigindo a ata no padrão de Ouro Preto... Como o áudio é longo, isso pode demorar alguns minutos. Pode tomar um café, só não feche esta página! 😉"):
                 
                 prompt_ouro_preto = """
                 Você é o Secretário Executivo do Conselho Municipal dos Direitos da Criança e do Adolescente (CMDCA) de Ouro Preto - MG. 
@@ -75,14 +72,14 @@ if arquivo_audio:
                 REGRAS RÍGIDAS DE FORMATAÇÃO E ESTILO (PADRÃO OURO PRETO):
                 1. Não quero transcrição integral de bate-papo. O texto deve ser sintético, formal, corrido e impessoal (terceira pessoa).
                 2. O documento deve ter um tamanho equilibrado (equivalente a 2 a 4 páginas no Word). Elimine informalidades.
-                3. Abertura por extenso: Comece rigorosamente no padrão formal: "Ao(s) [número por extenso] dias do mês de [mês] de [ano], às [horas] horas, reuniu-se..."
+                3. Abertura por extenso: Comece rigorosamente no padrão formal: "Ao(s) [número] dias do mês de [mês] de [ano], às [horas] horas, reuniu-se..."
                 4. Identifique o local ou a plataforma (ex: "de forma virtual pelo Google Meet" ou "na Casa dos Conselhos Municipais de Ouro Preto").
                 5. Registro de Presença: Liste de forma organizada quem estava presente (identificando se representam o Poder Público ou Sociedade Civil).
                 6. Corpo do Texto (Pauta e Discussão): Descreva os pontos debatidos em parágrafos justificados contínuos. Use frases formais como: "Passando para o primeiro ponto da pauta...", "Colocado em discussão...", "A conselheira [Nome] pediu a palavra...".
                 7. Votações e Deliberações: Registre com precisão o que foi deliberado e o resultado da votação (Aprovado por unanimidade, aprovado por maioria, ou rejeitado). Se houver resoluções aprovadas, cite explicitamente.
-                8. Fechamento Oficial: Termine obrigatoriamente com a fórmula: "Não havendo nada mais a tratar, eu, [Nome], lavrei a presente Ata que, após lida e aprovada, será assinada por mim e pela Presidência. Ouro Preto, [Data por extenso]."
+                8. Fechamento Oficial: Termine obrigatoriamente com a fórmula: "Não havendo nada mais a tratar, eu, Heloísa, lavrei a presente Ata que, após lida e aprovada, será assinada por mim e pela Presidência. Ouro Preto, [Data por extenso]."
                 
-                Gere o texto pronto, limpo, sem marcas de markdown (sem asteriscos de negrito, pois o programa cuidará disso).
+                Gere o texto pronto, limpo, sem marcas de markdown (sem asteriscos de negrito).
                 """
                 
                 response = client.models.generate_content(
@@ -92,13 +89,11 @@ if arquivo_audio:
                 
                 texto_ata = response.text
             
-            # Aqui, para simplificar o deploy na nuvem e evitar erros de permissão de pasta, 
-            # vamos disponibilizar o arquivo de texto formatado estruturado, que abre direto no Word perfeitamente.
             st.success("🎉 Parabéns, Heloísa! Sua ata oficial foi gerada com sucesso.")
             st.markdown("---")
             
             st.markdown("#### **Passo 3:** Baixar o documento")
-            st.write("Clique no botão verde abaixo para salvar o arquivo no seu computador. Depois, é só abri-lo com o Word para revisar e imprimir.")
+            st.write("Clique no botão verde abaixo para salvar o arquivo no seu computador. Depois, é só abrir com o Word.")
             
             st.download_button(
                 label="📥 CLIQUE AQUI PARA SALVAR A ATA NO COMPUTADOR",
@@ -117,7 +112,7 @@ if arquivo_audio:
                 os.remove(temp_filename)
                 
         except Exception as e:
-            st.error(f"Oi, Heloísa. Ocorreu um probleminha no processamento. Por favor, tente enviar o áudio de novo. Se persistir, avise o suporte. Detalhe técnico: {e}")
+            st.error(f"Oi, Heloísa. Ocorreu um probleminha no processamento. Por favor, tente enviar o áudio de novo. Detalhe técnico: {e}")
             if 'temp_filename' in locals() and os.path.exists(temp_filename):
                 os.remove(temp_filename)
 else:
